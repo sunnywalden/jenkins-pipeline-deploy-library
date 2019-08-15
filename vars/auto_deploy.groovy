@@ -227,6 +227,7 @@ def call(Map map) {
             }
 
             stage('发布') {
+                steps {
                     // generate deploy script
                     writeFile file: 'deploy.sh', text: "wget -O ${STACK_FILE_NAME} " +
                         " http://git.tezign.com/ops/jenkins-script.git/raw/master/resources/docker-compose/${STACK_FILE_NAME} \n" +
@@ -234,6 +235,7 @@ def call(Map map) {
 
                     // deploy
                     sshScript remote: remote, script: "deploy.sh"
+                }
             }
         }
 //         post {
