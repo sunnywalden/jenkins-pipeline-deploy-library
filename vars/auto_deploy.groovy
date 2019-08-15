@@ -29,7 +29,6 @@ def call(Map map) {
         agent {
             label 'master'
         }
-
         environment {
             // Ansible host
             REMOTE_HOST = "${map.REMOTE_HOST}"
@@ -68,106 +67,24 @@ def call(Map map) {
             STACK_FILE_NAME = 'docker-stack.yml'
             SEND_FILES = "${map.SEND_FILES}"
         }
-
-        // cron for pipe
-//         triggers {
-//         cron('H */4 * * 1-5')
-//         }
-
         stages {
             stage('获取代码') {
-
-            // 多分支pipe构建
-//                 parallel {
-//                     stage('Branch A') {
-//                         agent {
-//                             label "for-branch-a"
-//                         }
-//                         steps {
-//                             echo "On Branch A"
-//                         }
-//                     }
-//                     stage('Branch B') {
-//                         agent {
-//                             label "for-branch-b"
-//                         }
-//                         steps {
-//                             echo "On Branch B"
-//                         }
-//                     }
-//                 }
-//                 agent {
-//                     docker {
-//                         image 'python:3-alpine'
-//                         args "${map.BUILD_ARGS}"
-//                     }
-//                 }
-//                 when {
-//                     beforeAgent true
-//                     environment name: 'BUILD_TYPE', value: 'python3'
-//                 }
-
                 steps {
                     git([url: "${REPO_URL}", branch: "${BRANCH_NAME}", credentialsId: "${CREDENTIALS_ID}"])
                 }
             }
-
             stage('编译代码') {
-//                 agent {
-//
-//                     docker {
-//                         image 'python:3-alpine'
-//                         args "${map.BUILD_ARGS}"
-//                     }
-//                 }
-//                 when {
-//                     beforeAgent true
-//                     environment name: 'BUILD_TYPE', value: 'python3'
-//                 }
-//                 when {
-//                     expression {
-//                         BUILD_TYPE == "npm" || BUILD_TYPE == "maven" || BUILD_TYPE == "python2" ||  BUILD_TYPE == "python3"
-//                     }
-//                 }
                 steps {
                     sh 'echo `pwd`'
                     sh "${BUILD_CMD}"                     }
-//                 }
                 }
-//                 when {
-//                     BUILD_TYPE "maven"
-//                 }
-//                 steps {
-//                     withMaven(maven: 'maven 3.6') {
-//                                 sh "mvn -U -am clean package -DskipTests"
-//                     }
-//                 }
-//                 when {
-//                     BUILD_TYPE "npm"
-//                 }
-//                 steps {
-//
-//                 }
             }
-
             stage('构建镜像') {
-//                 agent {
-//
-//                     docker {
-//                         image 'python:3-alpine'
-//                         args "${map.BUILD_ARGS}"
-//                     }
-//                 }
-//                 when {
-//                     beforeAgent true
-//                     environment name: 'BUILD_TYPE', value: 'python3'
-//                 }
                 steps {
                     sh "docker build -t ${IMAGE_NAME}:${env.BUILD_ID} ."
                     sh "docker push ${IMAGE_NAME}:${env.BUILD_ID}"
                 }
             }
-
             stage('获取主机') {
                 steps {
                     script {
@@ -175,7 +92,6 @@ def call(Map map) {
                     }
                 }
             }
-
             stage('执行发版') {
                 steps {
                     // send files
@@ -191,16 +107,5 @@ def call(Map map) {
                 }
             }
         }
-//         post {
-//             success {
-//                 echo 'Deploy success'
-//             }
-//             unstable {
-//                 echo 'Deploy finished'
-//             }
-//             failure {
-//                 echo 'Deploy failed'
-//             }
-//         }
     }
 }
