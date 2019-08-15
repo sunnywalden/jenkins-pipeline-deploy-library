@@ -184,7 +184,7 @@ def call(Map map) {
 //                 }
                 steps {
                     sh '`pwd`'
-                    sh 'ls -la'
+                    sh 'ls -la .'
                     sh "${BUILD_CMD}"
 //                     post {
 //                         success {
