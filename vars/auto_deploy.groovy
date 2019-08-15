@@ -258,7 +258,7 @@ def call(Map map) {
 //                 }
             }
 
-            stage('init-server') {
+            stage('获取主机') {
                 steps {
                     script {
                         remote = getServer()
