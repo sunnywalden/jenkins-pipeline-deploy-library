@@ -183,8 +183,7 @@ def call(Map map) {
 //                     }
 //                 }
                 steps {
-                    sh '`pwd`'
-                    sh 'ls -la .'
+                    sh 'echo `pwd`'
                     sh "${BUILD_CMD}"
 //                     post {
 //                         success {
