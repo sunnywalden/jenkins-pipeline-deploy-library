@@ -19,8 +19,8 @@ def send_all(list) {
             source_file = item.split(':')[0]
             dest_file = item.split(':')[1]
         }
-        echo "send file ${env.source_file} to ${env.dest_file} now"
-        sshPut remote: remote, from: "${env.source_file}", into: "${env.dest_file}"
+        echo "send file ${source_file} to ${dest_file} now"
+        sshPut remote: remote, from: "${source_file}", into: "${dest_file}"
     }
 }
 
@@ -214,12 +214,19 @@ def call(Map map) {
                 }
             }
 
-            stage('执行发版') {
+            stage('更新') {
+                when {
+                    expression {
+                        SEND_FILES != []
+                    }
+                }
                 steps {
                     // send files
-                    if (SEND_FILES) {
-                        send_all("${SEND_FILES}")
-                    }
+                    send_all("${SEND_FILES}")
+                }
+            }
+
+            stage('发布') {
                     // generate deploy script
                     writeFile file: 'deploy.sh', text: "wget -O ${STACK_FILE_NAME} " +
                         " http://git.tezign.com/ops/jenkins-script.git/raw/master/resources/docker-compose/${STACK_FILE_NAME} \n" +
