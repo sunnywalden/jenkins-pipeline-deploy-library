@@ -98,7 +98,7 @@ def call(Map map) {
             APP_NAME = "${map.APP_NAME}"
             IMAGE_NAME = "${REGISTRY_URL}/" + "${map.APP_NAME}" + "_${map.ENV_TYPE}" + ":${TAG}}|${env.BUILD_ID}"
 //             STACK_FILE_NAME = "docker-stack-" + "${map.APP_NAME}" + "${map.ENV_TYPE}" + ".yml"
-            STACK_FILE_NAME = "docker-stack.yml"
+            STACK_FILE_NAME = 'docker-stack.yml'
             SEND_FILES = "${map.SEND_FILES}"
         }
 
@@ -132,13 +132,13 @@ def call(Map map) {
                 agent {
 
                     docker {
-                        image "python:3-alpine"
+                        image 'python:3-alpine'
                         args "${map.BUILD_ARGS}"
                     }
                 }
                 when {
                     beforeAgent true
-                    BUILD_TYPE "python3"
+                    BUILD_TYPE 'python3'
                 }
 
                 steps {
@@ -167,13 +167,13 @@ def call(Map map) {
                 agent {
 
                     docker {
-                        image "python:3-alpine"
+                        image 'python:3-alpine'
                         args "${map.BUILD_ARGS}"
                     }
                 }
                 when {
                     beforeAgent true
-                    BUILD_TYPE "python3"
+                    BUILD_TYPE 'python3'
                 }
 //                 when {
 //                     expression {
@@ -220,13 +220,13 @@ def call(Map map) {
                 agent {
 
                     docker {
-                        image "python:3-alpine"
+                        image 'python:3-alpine'
                         args "${map.BUILD_ARGS}"
                     }
                 }
                 when {
                     beforeAgent true
-                    BUILD_TYPE "python3"
+                    BUILD_TYPE 'python3'
                 }
                 steps {
                     sh docker build -t "${IMAGE_NAME}" .
