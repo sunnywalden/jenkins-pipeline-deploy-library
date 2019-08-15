@@ -15,8 +15,12 @@ def getServer() {
 @NonCPS // has to be NonCPS or the build breaks on the call to .each
 def send_all(list) {
     list.each { item ->
-        echo "send file ${item}.key to ${item}.vlue now"
-        sshPut remote: server, from: "${item}.key", into: "${item}.value"
+        environment {
+            source_file = ${item}.split(':')[0]
+            dest_file = ${item}.split(':')[1]
+        }
+        echo "send file ${source_file} to ${dest_file} now"
+        sshPut remote: server, from: "${source_file}", into: "${dest_file}"
     }
 }
 
