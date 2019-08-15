@@ -27,43 +27,43 @@ def send_all(list) {
 def call(Map map) {
 
     pipeline {
-        // agent any
-        agent {
-            when {
-                    BUILD_TYPE "maven"
-            }
-            docker {
-                image "maven:3-alpine"
-                args "${map.BUILD_ARGS}"
-            }
-            when {
-                    BUILD_TYPE "npm"
-            }
-            docker {
-                image 'node:6-alpine'
-                args "${map.BUILD_ARGS}"
-            }
-            when {
-                    BUILD_TYPE "python"
-            }
-            docker {
-                image 'python:2-alpine'
-                // sh 'python -m py_compile sources/add2vals.py sources/calc.py'
-                args "${map.BUILD_ARGS}"
-            }
-            when {
-                    BUILD_TYPE "python3"
-            }
-            docker {
-                image 'python:3-alpine'
-                // sh 'python -m py_compile sources/add2vals.py sources/calc.py'
-                args "${map.BUILD_ARGS}"
-            }
-            when {
-                    BUILD_TYPE "none"
-            }
-            any
-        }
+        agent none
+//         agent {
+//             when {
+//                     BUILD_TYPE "maven"
+//             }
+//             docker {
+//                 image "maven:3-alpine"
+//                 args "${map.BUILD_ARGS}"
+//             }
+//             when {
+//                     BUILD_TYPE "npm"
+//             }
+//             docker {
+//                 image 'node:6-alpine'
+//                 args "${map.BUILD_ARGS}"
+//             }
+//             when {
+//                     BUILD_TYPE "python"
+//             }
+//             docker {
+//                 image 'python:2-alpine'
+//                 // sh 'python -m py_compile sources/add2vals.py sources/calc.py'
+//                 args "${map.BUILD_ARGS}"
+//             }
+//             when {
+//                     BUILD_TYPE "python3"
+//             }
+//             docker {
+//                 image 'python:3-alpine'
+//                 // sh 'python -m py_compile sources/add2vals.py sources/calc.py'
+//                 args "${map.BUILD_ARGS}"
+//             }
+//             when {
+//                     BUILD_TYPE "none"
+//             }
+//             any
+//         }
 
         environment {
             // Ansible host
@@ -129,6 +129,17 @@ def call(Map map) {
 //                         }
 //                     }
 //                 }
+                agent {
+
+                    docker {
+                        image "python:3-alpine"
+                        args "${map.BUILD_ARGS}"
+                    }
+                }
+                when {
+                    beforeAgent true
+                    BUILD_TYPE "python3"
+                }
 
                 steps {
                     git([url: "${REPO_URL}", branch: "${BRANCH_NAME}", credentialsId: "${CREDENTIALS_ID}"])
@@ -153,11 +164,22 @@ def call(Map map) {
             }
 
             stage('编译代码') {
-                when {
-                    expression {
-                        BUILD_TYPE == "npm" || BUILD_TYPE == "maven" || BUILD_TYPE == "python2" ||  BUILD_TYPE == "python3"
+                agent {
+
+                    docker {
+                        image "python:3-alpine"
+                        args "${map.BUILD_ARGS}"
                     }
                 }
+                when {
+                    beforeAgent true
+                    BUILD_TYPE "python3"
+                }
+//                 when {
+//                     expression {
+//                         BUILD_TYPE == "npm" || BUILD_TYPE == "maven" || BUILD_TYPE == "python2" ||  BUILD_TYPE == "python3"
+//                     }
+//                 }
                 steps {
                     sh "${BUILD_CMD}"
                     post {
@@ -195,6 +217,17 @@ def call(Map map) {
             }
 
             stage('构建镜像') {
+                agent {
+
+                    docker {
+                        image "python:3-alpine"
+                        args "${map.BUILD_ARGS}"
+                    }
+                }
+                when {
+                    beforeAgent true
+                    BUILD_TYPE "python3"
+                }
                 steps {
                     sh docker build -t "${IMAGE_NAME}" .
                 }
