@@ -16,11 +16,11 @@ def getServer() {
 def send_all(list) {
     list.each { item ->
         environment {
-            source_file = ${item}.split(':')[0]
-            dest_file = ${item}.split(':')[1]
+            source_file = item.split(':')[0]
+            dest_file = item.split(':')[1]
         }
-        echo "send file ${source_file} to ${dest_file} now"
-        sshPut remote: server, from: "${source_file}", into: "${dest_file}"
+        echo "send file ${env.source_file} to ${env.dest_file} now"
+        sshPut remote: remote, from: "${env.source_file}", into: "${env.dest_file}"
     }
 }
 
@@ -134,12 +134,12 @@ def call(Map map) {
                     git([url: "${REPO_URL}", branch: "${BRANCH_NAME}", credentialsId: "${CREDENTIALS_ID}"])
                 }
                 post {
-                    changed | success {
+                    success {
                         environment {
                             code_res = 1
                         }
                     }
-                    unstable | fixed {
+                    unstable {
                         environment {
                             code_res = 0
                         }
@@ -154,17 +154,19 @@ def call(Map map) {
 
             stage('编译代码') {
                 when {
-                    BUILD_TYPE "npm" | "maven" | "python2" | "python3"
+                    expression {
+                        BUILD_TYPE == "npm" || BUILD_TYPE == "maven" || BUILD_TYPE == "python2" ||  BUILD_TYPE == "python3"
+                    }
                 }
                 steps {
                     sh "${BUILD_CMD}"
                     post {
-                        changed | success {
+                        success {
                             environment {
                                 build_res = 1
                             }
                         }
-                        unstable | fixed {
+                        unstable {
                             environment {
                                 build_res = 0
                             }
@@ -197,12 +199,12 @@ def call(Map map) {
                     sh docker build -t "${IMAGE_NAME}" .
                 }
                 post {
-                    changed | success {
+                    success {
                         environment {
                             docker_build_res = 1
                         }
                     }
-                    unstable | fixed {
+                    unstable {
                         environment {
                             docker_build__res = 0
                         }
@@ -222,7 +224,7 @@ def call(Map map) {
             stage('init-server') {
                 steps {
                     script {
-                        server = getServer()
+                        remote = getServer()
                     }
                 }
             }
@@ -238,7 +240,7 @@ def call(Map map) {
                         "sudo docker stack deploy -c ${STACK_FILE_NAME} ${APP_NAME}"
 
                     // deploy
-                    sshScript remote: server, script: "deploy.sh"
+                    sshScript remote: remote, script: "deploy.sh"
                 }
             }
         }
