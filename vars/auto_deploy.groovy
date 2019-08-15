@@ -18,6 +18,7 @@ def send_all(list) {
             source_file = item.split(':')[0]
             dest_file = item.split(':')[1]
         }
+        echo "${source_file} ${env.source_file}"
         echo "send file ${env.source_file} to ${env.dest_file} now"
         sshPut remote: remote, from: "${env.source_file}", into: "${env.dest_file}"
     }
