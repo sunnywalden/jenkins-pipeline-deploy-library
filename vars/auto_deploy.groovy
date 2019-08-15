@@ -25,9 +25,7 @@ def send_all(list) {
 }
 
 def call(Map map) {
-
     pipeline {
-//         agent none
         agent {
             label 'master'
         }
@@ -67,7 +65,6 @@ def call(Map map) {
             // deploy config
             APP_NAME = "${map.APP_NAME}"
             IMAGE_NAME = "${REGISTRY_URL}/" + "${map.APP_NAME}" + "_${map.ENV_TYPE}"
-//             STACK_FILE_NAME = "docker-stack-" + "${map.APP_NAME}" + "${map.ENV_TYPE}" + ".yml"
             STACK_FILE_NAME = 'docker-stack.yml'
             SEND_FILES = "${map.SEND_FILES}"
         }
@@ -193,6 +190,7 @@ def call(Map map) {
                     sshScript remote: remote, script: "deploy.sh"
                 }
             }
+        }
         post {
             success {
                 echo 'Deploy success'
