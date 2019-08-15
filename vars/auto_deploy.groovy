@@ -191,16 +191,16 @@ def call(Map map) {
                 }
             }
         }
-        post {
-            success {
-                echo 'Deploy success'
-            }
-            unstable {
-                echo 'Deploy finished'
-            }
-            failure {
-                echo 'Deploy failed'
-            }
-        }
+//         post {
+//             success {
+//                 echo 'Deploy success'
+//             }
+//             unstable {
+//                 echo 'Deploy finished'
+//             }
+//             failure {
+//                 echo 'Deploy failed'
+//             }
+//         }
     }
 }
