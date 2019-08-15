@@ -1,7 +1,7 @@
 version: '3.4'
 services:
     "{{ APP_NAME }}":
-         image: "{{ registry_url }}/{{ project_name }}:{{ version }}"
+         image: "{{ IMAGE_NAME }}:{{ env.BUILD_ID }}"
          {% if PORTS != '' -%}
          ports:
            - '{{ PORTS }}'

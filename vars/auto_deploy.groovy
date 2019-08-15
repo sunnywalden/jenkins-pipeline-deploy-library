@@ -99,7 +99,7 @@ def call(Map map) {
 
             // deploy config
             APP_NAME = "${map.APP_NAME}"
-            IMAGE_NAME = "${REGISTRY_URL}/" + "${map.APP_NAME}" + "_${map.ENV_TYPE}" + ":${TAG}}|${env.BUILD_ID}"
+            IMAGE_NAME = "${REGISTRY_URL}/" + "${map.APP_NAME}" + "_${map.ENV_TYPE}"
 //             STACK_FILE_NAME = "docker-stack-" + "${map.APP_NAME}" + "${map.ENV_TYPE}" + ".yml"
             STACK_FILE_NAME = 'docker-stack.yml'
             SEND_FILES = "${map.SEND_FILES}"
@@ -232,7 +232,8 @@ def call(Map map) {
 //                     environment name: 'BUILD_TYPE', value: 'python3'
 //                 }
                 steps {
-                    sh "docker build -t ${IMAGE_NAME} ."
+                    sh "docker build -t ${IMAGE_NAME}:${env.BUILD_ID} ."
+                    sh "docker push ${IMAGE_NAME}:${env.BUILD_ID}"
                 }
 //                 post {
 //                     success {
