@@ -228,7 +228,7 @@ def call(Map map) {
                     environment name: 'BUILD_TYPE', value: 'python3'
                 }
                 steps {
-                    sh docker build -t "${IMAGE_NAME}" .
+                    sh "docker build -t ${IMAGE_NAME} ."
                 }
                 post {
                     success {
