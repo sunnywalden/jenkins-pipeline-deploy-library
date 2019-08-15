@@ -31,46 +31,13 @@ def call(Map map) {
         agent {
             label 'master'
         }
-//         agent {
-//             when {
-//                     BUILD_TYPE "maven"
-//             }
-//             docker {
-//                 image "maven:3-alpine"
-//                 args "${map.BUILD_ARGS}"
-//             }
-//             when {
-//                     BUILD_TYPE "npm"
-//             }
-//             docker {
-//                 image 'node:6-alpine'
-//                 args "${map.BUILD_ARGS}"
-//             }
-//             when {
-//                     BUILD_TYPE "python"
-//             }
-//             docker {
-//                 image 'python:2-alpine'
-//                 // sh 'python -m py_compile sources/add2vals.py sources/calc.py'
-//                 args "${map.BUILD_ARGS}"
-//             }
-//             when {
-//                     BUILD_TYPE "python3"
-//             }
-//             docker {
-//                 image 'python:3-alpine'
-//                 // sh 'python -m py_compile sources/add2vals.py sources/calc.py'
-//                 args "${map.BUILD_ARGS}"
-//             }
-//             when {
-//                     BUILD_TYPE "none"
-//             }
-//             any
-//         }
 
         environment {
             // Ansible host
             REMOTE_HOST = "${map.REMOTE_HOST}"
+            REMOTE_USER = "${map.REMOTE_USER}"
+            REMOTE_PORT = "${map.REMOTE_PORT}"
+            REMOTE_SUDO_PASSWORD = "${map.REMOTE_SUDO_PASSWORD}"
             //  git config
             REPO_URL = "${map.REPO_URL}"
             BRANCH_NAME = "${map.BRANCH_NAME}"
@@ -146,23 +113,6 @@ def call(Map map) {
                 steps {
                     git([url: "${REPO_URL}", branch: "${BRANCH_NAME}", credentialsId: "${CREDENTIALS_ID}"])
                 }
-//                 post {
-//                     success {
-//                         environment {
-//                             echo 'pull code success'
-//                         }
-//                     }
-//                     unstable {
-//                         environment {
-//                             code_res = 0
-//                         }
-//                     }
-//                     failure {
-//                         environment {
-//                             code_res = -1
-//                         }
-//                     }
-//                 }
             }
 
             stage('编译代码') {
@@ -184,24 +134,8 @@ def call(Map map) {
 //                 }
                 steps {
                     sh 'echo `pwd`'
-                    sh "${BUILD_CMD}"
-//                     post {
-//                         success {
-//                             environment {
-//                                 build_res = 1
-//                             }
-//                         }
-//                         unstable {
-//                             environment {
-//                                 build_res = 0
-//                             }
-//                         }
-//                         failure {
-//                             environment {
-//                                 build_res = -1
-//                             }
-//                         }
-//                     }
+                    sh "${BUILD_CMD}"                     }
+//                 }
                 }
 //                 when {
 //                     BUILD_TYPE "maven"
@@ -235,27 +169,6 @@ def call(Map map) {
                     sh "docker build -t ${IMAGE_NAME}:${env.BUILD_ID} ."
                     sh "docker push ${IMAGE_NAME}:${env.BUILD_ID}"
                 }
-//                 post {
-//                     success {
-//                         environment {
-//                             docker_build_res = 1
-//                         }
-//                     }
-//                     unstable {
-//                         environment {
-//                             docker_build__res = 0
-//                         }
-//                     }
-//                     failure {
-//                         environment {
-//                             docker_build__res = -1
-//                         }
-//                     }
-//                 }
-//                 steps {
-//                     sh "wget -O build.sh https://git.x-vipay.com/docker/jenkins-pipeline-library/raw/master/resources/shell/build.sh"
-//                     sh "sh build.sh ${BRANCH_NAME} "
-//                 }
             }
 
             stage('获取主机') {
@@ -281,22 +194,16 @@ def call(Map map) {
                 }
             }
         }
-//         post {
-//             success {
-//                 environment {
-//                             docker_build_res = 1
-//                         }
-//                 }
-//             unstable {
-//                 environment {
-//                             docker_build__res = 0
-//                 }
-//             }
-//             failure {
-//                 environment {
-//                             docker_build__res = -1
-//                 }
-//             }
-//         }
+        post {
+            success {
+                echo 'Deploy success'
+            }
+            unstable {
+                echo 'Deploy finished'
+            }
+            failure {
+                echo 'Deploy failed'
+            }
+        }
     }
 }
