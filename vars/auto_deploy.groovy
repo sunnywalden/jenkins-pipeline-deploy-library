@@ -27,7 +27,10 @@ def send_all(list) {
 def call(Map map) {
 
     pipeline {
-        agent none
+//         agent none
+        agent {
+            label 'master'
+        }
 //         agent {
 //             when {
 //                     BUILD_TYPE "maven"
@@ -129,16 +132,16 @@ def call(Map map) {
 //                         }
 //                     }
 //                 }
-                agent {
-                    docker {
-                        image 'python:3-alpine'
-                        args "${map.BUILD_ARGS}"
-                    }
-                }
-                when {
-                    beforeAgent true
-                    environment name: 'BUILD_TYPE', value: 'python3'
-                }
+//                 agent {
+//                     docker {
+//                         image 'python:3-alpine'
+//                         args "${map.BUILD_ARGS}"
+//                     }
+//                 }
+//                 when {
+//                     beforeAgent true
+//                     environment name: 'BUILD_TYPE', value: 'python3'
+//                 }
 
                 steps {
                     git([url: "${REPO_URL}", branch: "${BRANCH_NAME}", credentialsId: "${CREDENTIALS_ID}"])
@@ -163,17 +166,17 @@ def call(Map map) {
             }
 
             stage('编译代码') {
-                agent {
-
-                    docker {
-                        image 'python:3-alpine'
-                        args "${map.BUILD_ARGS}"
-                    }
-                }
-                when {
-                    beforeAgent true
-                    environment name: 'BUILD_TYPE', value: 'python3'
-                }
+//                 agent {
+//
+//                     docker {
+//                         image 'python:3-alpine'
+//                         args "${map.BUILD_ARGS}"
+//                     }
+//                 }
+//                 when {
+//                     beforeAgent true
+//                     environment name: 'BUILD_TYPE', value: 'python3'
+//                 }
 //                 when {
 //                     expression {
 //                         BUILD_TYPE == "npm" || BUILD_TYPE == "maven" || BUILD_TYPE == "python2" ||  BUILD_TYPE == "python3"
@@ -216,17 +219,17 @@ def call(Map map) {
             }
 
             stage('构建镜像') {
-                agent {
-
-                    docker {
-                        image 'python:3-alpine'
-                        args "${map.BUILD_ARGS}"
-                    }
-                }
-                when {
-                    beforeAgent true
-                    environment name: 'BUILD_TYPE', value: 'python3'
-                }
+//                 agent {
+//
+//                     docker {
+//                         image 'python:3-alpine'
+//                         args "${map.BUILD_ARGS}"
+//                     }
+//                 }
+//                 when {
+//                     beforeAgent true
+//                     environment name: 'BUILD_TYPE', value: 'python3'
+//                 }
                 steps {
                     sh "docker build -t ${IMAGE_NAME} ."
                 }
