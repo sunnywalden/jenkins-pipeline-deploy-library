@@ -130,7 +130,6 @@ def call(Map map) {
 //                     }
 //                 }
                 agent {
-
                     docker {
                         image 'python:3-alpine'
                         args "${map.BUILD_ARGS}"
@@ -138,7 +137,7 @@ def call(Map map) {
                 }
                 when {
                     beforeAgent true
-                    BUILD_TYPE 'python3'
+                    environment name: 'BUILD_TYPE', value: 'python3'
                 }
 
                 steps {
@@ -173,7 +172,7 @@ def call(Map map) {
                 }
                 when {
                     beforeAgent true
-                    BUILD_TYPE 'python3'
+                    environment name: 'BUILD_TYPE', value: 'python3'
                 }
 //                 when {
 //                     expression {
@@ -226,7 +225,7 @@ def call(Map map) {
                 }
                 when {
                     beforeAgent true
-                    BUILD_TYPE 'python3'
+                    environment name: 'BUILD_TYPE', value: 'python3'
                 }
                 steps {
                     sh docker build -t "${IMAGE_NAME}" .
