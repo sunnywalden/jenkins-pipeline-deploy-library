@@ -5,10 +5,19 @@ def getServer() {
     remote.name = 'manager node'
     remote.user = "${REMOTE_USER}"
     remote.host = "${REMOTE_HOST}"
+    remote.password = "${REMOTE_SUDO_PASSWORD}"
     remote.port = "${REMOTE_PORT}"
     remote.identityFile = '/root/.ssh/id_rsa'
     remote.allowAnyHosts = true
     return remote
+}
+
+@NonCPS // has to be NonCPS or the build breaks on the call to .each
+def send_all(list) {
+    list.each { item ->
+        echo "send file ${item}.key to ${item}.vlue now"
+        sshPut remote: server, from: "${item}.key", into: "${item}.value"
+    }
 }
 
 def call(Map map) {
@@ -28,6 +37,22 @@ def call(Map map) {
             }
             docker {
                 image 'node:6-alpine'
+                args "${map.BUILD_ARGS}"
+            }
+            when {
+                    BUILD_TYPE "python"
+            }
+            docker {
+                image 'python:2-alpine'
+                // sh 'python -m py_compile sources/add2vals.py sources/calc.py'
+                args "${map.BUILD_ARGS}"
+            }
+            when {
+                    BUILD_TYPE "python3"
+            }
+            docker {
+                image 'python:3-alpine'
+                // sh 'python -m py_compile sources/add2vals.py sources/calc.py'
                 args "${map.BUILD_ARGS}"
             }
             when {
@@ -65,10 +90,12 @@ def call(Map map) {
             VOLUMES = "${map.VOLUMES}"
             ENVS = "${map.ENVS}"
 
+            // deploy config
             APP_NAME = "${map.APP_NAME}"
             IMAGE_NAME = "${REGISTRY_URL}/" + "${map.APP_NAME}" + "_${map.ENV_TYPE}" + ":${TAG}}|${env.BUILD_ID}"
 //             STACK_FILE_NAME = "docker-stack-" + "${map.APP_NAME}" + "${map.ENV_TYPE}" + ".yml"
             STACK_FILE_NAME = "docker-stack.yml"
+            SEND_FILES = "${map.SEND_FILES}"
         }
 
         // cron for pipe
@@ -123,7 +150,7 @@ def call(Map map) {
 
             stage('编译代码') {
                 when {
-                    BUILD_TYPE "npm" | "maven"
+                    BUILD_TYPE "npm" | "maven" | "python2" | "python3"
                 }
                 steps {
                     sh "${BUILD_CMD}"
@@ -198,9 +225,15 @@ def call(Map map) {
 
             stage('执行发版') {
                 steps {
+                    // send files
+                    send_all(${SEND_FILES})
+
+                    // generate deploy script
                     writeFile file: 'deploy.sh', text: "wget -O ${STACK_FILE_NAME} " +
-                        " https://git.x-vipay.com/docker/jenkins-pipeline-library/raw/master/resources/docker-compose/${STACK_FILE_NAME} \n" +
+                        " http://git.tezign.com/ops/jenkins-script.git/raw/master/resources/docker-compose/${STACK_FILE_NAME} \n" +
                         "sudo docker stack deploy -c ${STACK_FILE_NAME} ${APP_NAME}"
+
+                    // deploy
                     sshScript remote: server, script: "deploy.sh"
                 }
             }
