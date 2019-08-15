@@ -16,7 +16,9 @@ def send_all(list) {
     list.each { item ->
 //         environment {
         script {
+            echo "${item}"
             files = item.split(':')
+
             echo "send file ${files}"
         }
 //         echo "${source_file} ${env.source_file}"
