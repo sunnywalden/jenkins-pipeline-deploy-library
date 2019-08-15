@@ -16,7 +16,7 @@ def send_all(list) {
     list.each { item ->
 //         environment {
         script {
-            echo "${item}"
+            echo "print file object to be send: ${item}"
             def files = item.split(':')
             def source_file = ${files}.split(":")[0]
             def dest_file = ${files}.split(":")[1]
@@ -224,11 +224,11 @@ def call(Map map) {
                     }
                 }
                 steps {
-                    echo "${SEND_FILES}"
+                    echo "print all files objects: ${SEND_FILES}"
                     script {
                         def files = ${SEND_FILES}.split(',')
                     }
-                    echo "${files}"
+                    echo "print objects list: ${files}"
                     // send files
                     send_all("${files}")
                 }
