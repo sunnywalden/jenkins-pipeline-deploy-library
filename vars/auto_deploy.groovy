@@ -193,7 +193,6 @@ def call(Map map) {
                     sshScript remote: remote, script: "deploy.sh"
                 }
             }
-        }
         post {
             success {
                 echo 'Deploy success'
