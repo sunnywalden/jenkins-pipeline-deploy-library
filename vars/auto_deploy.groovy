@@ -17,12 +17,13 @@ def send_all(list) {
 //         environment {
         script {
             echo "${item}"
-            files = item.split(':')
-
-            echo "send file ${files}"
+            def files = item.split(':')
+            def source_file = ${files}.split(":")[0]
+            def dest_file = ${files}.split(":")[1]
         }
+        echo "send file ${source_file} to ${dest_file}"
 //         echo "${source_file} ${env.source_file}"
-//         sshPut remote: remote, from: "${files}", into: "${files}"
+        sshPut remote: remote, from: "${source_file}", into: "${dest_file}"
     }
 }
 
@@ -223,8 +224,13 @@ def call(Map map) {
                     }
                 }
                 steps {
+                    echo "${SEND_FILES}"
+                    script {
+                        def files = ${SEND_FILES}.split(',')
+                    }
+                    echo "${files}"
                     // send files
-                    send_all("${SEND_FILES}")
+                    send_all("${files}")
                 }
             }
 
