@@ -106,4 +106,3 @@ def call(Map map) {
             }
         }
     }
-}
