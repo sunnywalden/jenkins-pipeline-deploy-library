@@ -234,7 +234,6 @@ def call(Map map) {
 
                     // deploy
                     sshScript remote: remote, script: "deploy.sh"
-                }
             }
         }
 //         post {
