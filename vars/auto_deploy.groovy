@@ -12,7 +12,6 @@ def getServer() {
     return remote
 }
 
-@NonCPS // has to be NonCPS or the build breaks on the call to .each
 def send_all(list) {
     list.each { item ->
         environment {
