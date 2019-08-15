@@ -264,7 +264,7 @@ def call(Map map) {
             stage('执行发版') {
                 steps {
                     // send files
-                    send_all(${SEND_FILES})
+                    send_all("${SEND_FILES}")
 
                     // generate deploy script
                     writeFile file: 'deploy.sh', text: "wget -O ${STACK_FILE_NAME} " +
