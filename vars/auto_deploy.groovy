@@ -149,23 +149,6 @@ def call(Map map) {
                 steps {
                     git([url: "${REPO_URL}", branch: "${BRANCH_NAME}", credentialsId: "${CREDENTIALS_ID}"])
                 }
-//                 post {
-//                     success {
-//                         environment {
-//                             echo 'pull code success'
-//                         }
-//                     }
-//                     unstable {
-//                         environment {
-//                             code_res = 0
-//                         }
-//                     }
-//                     failure {
-//                         environment {
-//                             code_res = -1
-//                         }
-//                     }
-//                 }
             }
 
             stage('编译代码') {
@@ -188,23 +171,6 @@ def call(Map map) {
                 steps {
                     sh 'echo `pwd`'
                     sh "${BUILD_CMD}"
-//                     post {
-//                         success {
-//                             environment {
-//                                 build_res = 1
-//                             }
-//                         }
-//                         unstable {
-//                             environment {
-//                                 build_res = 0
-//                             }
-//                         }
-//                         failure {
-//                             environment {
-//                                 build_res = -1
-//                             }
-//                         }
-//                     }
                 }
 //                 when {
 //                     BUILD_TYPE "maven"
@@ -238,27 +204,6 @@ def call(Map map) {
                     sh "docker build -t ${IMAGE_NAME}:${env.BUILD_ID} ."
                     sh "docker push ${IMAGE_NAME}:${env.BUILD_ID}"
                 }
-//                 post {
-//                     success {
-//                         environment {
-//                             docker_build_res = 1
-//                         }
-//                     }
-//                     unstable {
-//                         environment {
-//                             docker_build__res = 0
-//                         }
-//                     }
-//                     failure {
-//                         environment {
-//                             docker_build__res = -1
-//                         }
-//                     }
-//                 }
-//                 steps {
-//                     sh "wget -O build.sh https://git.x-vipay.com/docker/jenkins-pipeline-library/raw/master/resources/shell/build.sh"
-//                     sh "sh build.sh ${BRANCH_NAME} "
-//                 }
             }
 
             stage('获取主机') {
@@ -272,8 +217,9 @@ def call(Map map) {
             stage('执行发版') {
                 steps {
                     // send files
-                    send_all("${SEND_FILES}")
-
+                    if (SEND_FILES) {
+                        send_all("${SEND_FILES}")
+                    }
                     // generate deploy script
                     writeFile file: 'deploy.sh', text: "wget -O ${STACK_FILE_NAME} " +
                         " http://git.tezign.com/ops/jenkins-script.git/raw/master/resources/docker-compose/${STACK_FILE_NAME} \n" +
