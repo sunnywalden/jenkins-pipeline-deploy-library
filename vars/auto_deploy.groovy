@@ -143,23 +143,23 @@ def call(Map map) {
                 steps {
                     git([url: "${REPO_URL}", branch: "${BRANCH_NAME}", credentialsId: "${CREDENTIALS_ID}"])
                 }
-                post {
-                    success {
-                        environment {
-                            code_res = 1
-                        }
-                    }
-                    unstable {
-                        environment {
-                            code_res = 0
-                        }
-                    }
-                    failure {
-                        environment {
-                            code_res = -1
-                        }
-                    }
-                }
+//                 post {
+//                     success {
+//                         environment {
+//                             echo 'pull code success'
+//                         }
+//                     }
+//                     unstable {
+//                         environment {
+//                             code_res = 0
+//                         }
+//                     }
+//                     failure {
+//                         environment {
+//                             code_res = -1
+//                         }
+//                     }
+//                 }
             }
 
             stage('编译代码') {
@@ -181,23 +181,23 @@ def call(Map map) {
 //                 }
                 steps {
                     sh "${BUILD_CMD}"
-                    post {
-                        success {
-                            environment {
-                                build_res = 1
-                            }
-                        }
-                        unstable {
-                            environment {
-                                build_res = 0
-                            }
-                        }
-                        failure {
-                            environment {
-                                build_res = -1
-                            }
-                        }
-                    }
+//                     post {
+//                         success {
+//                             environment {
+//                                 build_res = 1
+//                             }
+//                         }
+//                         unstable {
+//                             environment {
+//                                 build_res = 0
+//                             }
+//                         }
+//                         failure {
+//                             environment {
+//                                 build_res = -1
+//                             }
+//                         }
+//                     }
                 }
 //                 when {
 //                     BUILD_TYPE "maven"
@@ -230,23 +230,23 @@ def call(Map map) {
                 steps {
                     sh "docker build -t ${IMAGE_NAME} ."
                 }
-                post {
-                    success {
-                        environment {
-                            docker_build_res = 1
-                        }
-                    }
-                    unstable {
-                        environment {
-                            docker_build__res = 0
-                        }
-                    }
-                    failure {
-                        environment {
-                            docker_build__res = -1
-                        }
-                    }
-                }
+//                 post {
+//                     success {
+//                         environment {
+//                             docker_build_res = 1
+//                         }
+//                     }
+//                     unstable {
+//                         environment {
+//                             docker_build__res = 0
+//                         }
+//                     }
+//                     failure {
+//                         environment {
+//                             docker_build__res = -1
+//                         }
+//                     }
+//                 }
 //                 steps {
 //                     sh "wget -O build.sh https://git.x-vipay.com/docker/jenkins-pipeline-library/raw/master/resources/shell/build.sh"
 //                     sh "sh build.sh ${BRANCH_NAME} "
@@ -276,5 +276,22 @@ def call(Map map) {
                 }
             }
         }
+//         post {
+//             success {
+//                 environment {
+//                             docker_build_res = 1
+//                         }
+//                 }
+//             unstable {
+//                 environment {
+//                             docker_build__res = 0
+//                 }
+//             }
+//             failure {
+//                 environment {
+//                             docker_build__res = -1
+//                 }
+//             }
+//         }
     }
 }
