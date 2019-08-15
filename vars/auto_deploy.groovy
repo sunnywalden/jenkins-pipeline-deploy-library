@@ -35,6 +35,7 @@ def call(Map map) {
             REMOTE_USER = "${map.REMOTE_USER}"
             REMOTE_PORT = "${map.REMOTE_PORT}"
             REMOTE_SUDO_PASSWORD = "${map.REMOTE_SUDO_PASSWORD}"
+
             //  git config
             REPO_URL = "${map.REPO_URL}"
             BRANCH_NAME = "${map.BRANCH_NAME}"
@@ -49,7 +50,6 @@ def call(Map map) {
             BUILD_TYPE = "${map.BUILD_TYPE}"
             BUILD_ARGS = "${map.BUILD_ARGS}"
             BUILD_CMD = "${map.BUILD_CMD}"
-
 
             // docker config
             REGISTRY_URL = "${map.REGISTRY_URL}"
@@ -96,12 +96,10 @@ def call(Map map) {
                 steps {
                     // send files
                     send_all("${SEND_FILES}")
-
                     // generate deploy script
                     writeFile file: 'deploy.sh', text: "wget -O ${STACK_FILE_NAME} " +
                         " http://git.tezign.com/ops/jenkins-script.git/raw/master/resources/docker-compose/${STACK_FILE_NAME} \n" +
                         "sudo docker stack deploy -c ${STACK_FILE_NAME} ${APP_NAME}"
-
                     // deploy
                     sshScript remote: remote, script: "deploy.sh"
                 }
