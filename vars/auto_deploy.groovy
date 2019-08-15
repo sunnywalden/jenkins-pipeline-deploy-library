@@ -20,7 +20,7 @@ def send_all(list) {
 //         }
 //         echo "${source_file} ${env.source_file}"
 //         echo "send file ${env.source_file} to ${env.dest_file} now"
-        sshPut remote: remote, from: item.split(':')[0], into: item.split(':')[1]"
+        sshPut remote: remote, from: item.split(':')[0], into: item.split(':')[1]
     }
 }
 
