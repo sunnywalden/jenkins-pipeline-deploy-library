@@ -238,7 +238,7 @@ def call(Map map) {
                 steps {
                     // generate deploy script
                     writeFile file: 'deploy.sh', text: "wget -O ${STACK_FILE_NAME} " +
-                        " http://git.tezign.com/ops/jenkins-script.git/raw/master/resources/docker-compose/${STACK_FILE_NAME} \n" +
+                        " https://git.tezign.com/ops/jenkins-script/raw/master/resources/docker-compose/${STACK_FILE_NAME} \n" +
                         "sudo docker stack deploy -c ${STACK_FILE_NAME} ${APP_NAME}"
 
                     // deploy
