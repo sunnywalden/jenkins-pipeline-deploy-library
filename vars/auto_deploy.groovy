@@ -111,19 +111,19 @@ def call(Map map) {
             // docker config
             REGISTRY_URL = "${map.REGISTRY_URL}"
             MEMORY_LIMIT = "${map.MEMORY_LIMIT}"
-            PORTS = "${map.PORTS}"
+            PORTS = "${map.PORTS}".split(',')
             REPLICATES = "${map.REPLICATES}"
             HEALTH_CHECK = "${map.HEALTH_CHECK}"
             NETWORK = "${map.NETWORK}"
-            VOLUMES = "${map.VOLUMES}"
-            ENVS = "${map.ENVS}"
+            VOLUMES = "${map.VOLUMES}".split(',')
+            ENVS = "${map.ENVS}".split(',')
 
             // deploy config
             APP_NAME = "${map.APP_NAME}"
             IMAGE_NAME = "${REGISTRY_URL}/" + "${map.APP_NAME}" + "_${map.ENV_TYPE}"
 //             STACK_FILE_NAME = "docker-stack-" + "${map.APP_NAME}" + "${map.ENV_TYPE}" + ".yml"
             STACK_FILE_NAME = 'docker-stack.yml'
-            SEND_FILES = new JsonSlurper().parseText("${map.SEND_FILES}")
+            SEND_FILES = "${map.SEND_FILES}".split(',')
         }
 
         // cron for pipe
