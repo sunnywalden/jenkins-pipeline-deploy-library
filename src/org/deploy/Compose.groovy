@@ -1,3 +1,13 @@
+#!groovy
+
+class DockerCompose {
+
+    def generate_compose() {
+        filePath = "/tmp/docker-stack.yml"
+        File file = new File(filePath)
+
+        file <<
+"""
 version: '3.4'
 services:
     "{{ APP_NAME }}":
@@ -38,3 +48,7 @@ services:
 networks:
   tezign:
     external: true
+"""
+    println file.text
+}
+}

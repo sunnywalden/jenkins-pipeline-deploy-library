@@ -1,36 +1,8 @@
 #!groovy
 
 import groovy.json.JsonSlurper
-
-def getServer() {
-    def remote = [:]
-    remote.name = 'manager node'
-    remote.user = "${REMOTE_USER}"
-    remote.host = "${REMOTE_HOST}"
-    remote.password = "${REMOTE_SUDO_PASSWORD}"
-    remote.port = "${REMOTE_PORT}".toInteger()
-    remote.identityFile = '/root/.ssh/id_rsa'
-    remote.allowAnyHosts = true
-    return remote
-}
-
-def send_all(file_str) {
-
-    files_list = file_str.split(',')
-    files_list.each { item ->
-            echo "print file object to be send: ${item}"
-            files = item.split(':')
-            if (files.size() == 2) {
-                source_file = files[0]
-                dest_file = files[1]
-            } else {
-                return 0
-            }
-            echo "send file ${source_file} to ${dest_file}"
-            sshPut remote: remote, from: "${source_file}", into: "${dest_file}"
-    }
-}
-
+import src.org.deploy.Utils.ComFunc
+import src.org.deploy.Compose.DockerCompose
 
 def call(String type, Map map) {
 //     if ( type == "maven" ) {
@@ -360,7 +332,7 @@ def call(String type, Map map) {
             stage('获取主机') {
                 steps {
                     script {
-                        remote = getServer()
+                        remote = ComFunc.getServer()
                     }
                 }
             }
@@ -374,7 +346,7 @@ def call(String type, Map map) {
                 steps {
                     echo "print all files objects: ${SEND_FILES}"
                     // send files
-                    send_all("${SEND_FILES}")
+                    ComFunc.send_all("${SEND_FILES}")
                 }
             }
 
@@ -386,7 +358,8 @@ def call(String type, Map map) {
                         "sudo docker stack deploy -c /tmp/${STACK_FILE_NAME} ${APP_NAME}"
 
                     // deploy
-                    sshPut remote: remote, from: "../resources/dcoker-compose/docker-stack.groovy", into: "/tmp/docker-stack.yml"
+                    DockerCompose.generate_compose()
+                    sshPut remote: remote, from: "/tmp/docker-stack.yml", into: "/tmp/docker-stack.yml"
                     sshScript remote: remote, script: "deploy.sh"
                 }
             }
