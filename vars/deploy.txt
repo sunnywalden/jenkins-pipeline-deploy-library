@@ -1,0 +1,9 @@
+A script from sunnywalden
+
+this library can be used for your app deploy, the main sections included:
+    pull code from git
+    build your code
+    build docker image
+    get deploy server
+    update code
+    deploy
