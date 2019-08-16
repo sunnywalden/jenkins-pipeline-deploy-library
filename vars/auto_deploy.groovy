@@ -123,7 +123,7 @@ def call(Map map) {
             IMAGE_NAME = "${REGISTRY_URL}/" + "${map.APP_NAME}" + "_${map.ENV_TYPE}"
 //             STACK_FILE_NAME = "docker-stack-" + "${map.APP_NAME}" + "${map.ENV_TYPE}" + ".yml"
             STACK_FILE_NAME = 'docker-stack.yml'
-            SEND_FILES = "${map.SEND_FILES}"
+            SEND_FILES = new JsonSlurper().parseText("${map.SEND_FILES}")
         }
 
         // cron for pipe
@@ -243,7 +243,7 @@ def call(Map map) {
                     println SEND_FILES.class
                     script {
                         if (SEND_FILES instanceof java.lang.String) {
-                            echo 'Convertion string to list'
+                            echo 'Convertion string ${SEND_FILES} to list'
                             files = new JsonSlurper().parseText(SEND_FILES)
                         }
                         else {
