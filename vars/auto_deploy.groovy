@@ -259,7 +259,9 @@ def call(Map map) {
                 echo 'Deploy pipeline finished'
             }
             failure {
-                mail to: zhangbo@tezign.com, subject: 'The Pipeline failed :('
+                mail to: 'zhangbo@tezign.com', subject: 'The Pipeline failed', body: '''
+                    Deploy pipeline is failed
+                '''
             }
         }
 //         post {
