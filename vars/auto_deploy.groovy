@@ -12,14 +12,17 @@ def getServer() {
     return remote
 }
 
-def send_all(list) {
-    list.each { item ->
+def send_all(file_str) {
+    script {
+        files_list = file_str.split(',')
+    }
+    files_list.each { item ->
 //         environment {
         script {
             echo "print file object to be send: ${item}"
-            def files = item.split(':')
-            def source_file = ${files}.split(":")[0]
-            def dest_file = ${files}.split(":")[1]
+            files = item.split(':')
+            source_file = ${files}.split(":")[0]
+            dest_file = ${files}.split(":")[1]
         }
         echo "send file ${source_file} to ${dest_file}"
 //         echo "${source_file} ${env.source_file}"
@@ -225,12 +228,12 @@ def call(Map map) {
                 }
                 steps {
                     echo "print all files objects: ${SEND_FILES}"
-                    script {
-                        files = SEND_FILES.split(',')
-                    }
-                    echo "print objects list: ${files}"
+//                     script {
+//                         files = SEND_FILES.split(',')
+//                     }
+//                     echo "print objects list: ${files}"
                     // send files
-                    send_all("${files}")
+                    send_all("${SEND_FILES}")
                 }
             }
 
