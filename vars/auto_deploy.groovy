@@ -6,7 +6,7 @@ def getServer() {
     remote.user = "${REMOTE_USER}"
     remote.host = "${REMOTE_HOST}"
     remote.password = "${REMOTE_SUDO_PASSWORD}"
-    remote.port = "${REMOTE_PORT}"
+    remote.port = "${REMOTE_PORT}".toInteger()
     remote.identityFile = '/root/.ssh/id_rsa'
     remote.allowAnyHosts = true
     return remote
