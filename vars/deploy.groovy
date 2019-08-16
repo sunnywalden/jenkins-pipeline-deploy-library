@@ -12,24 +12,19 @@ def generate_compose() {
 """
 version: '3.4'
 services:
-    "{{ APP_NAME }}":
-         image: "{{ IMAGE_NAME }}:{{ env.BUILD_ID }}"
-         {% if PORTS != '' -%}
-         ports:
-           - '{{ PORTS }}'
-         {% endif %}
-
-         environment: '{{ ENVS }}'
-
+    "${{ APP_NAME }}":
+         image: "${{ IMAGE_NAME }}:${{ env.BUILD_ID }}"
+         ports: "${{ ports_list }}"
+         environment: "${{ envs_list }}"
          networks:
-           - '{{ NETWORK }}'
-         volumes: '{{ VOLUMES }}'
+           - "${{ NETWORK }}"
+         volumes: "${{ volumes_list }}"
          stop_grace_period: 30s # Specify how long to wait when attempting to stop a container if it doesn’t handle SIGTERM
          deploy:
-           replicas: '{{ REPLICATES }}'
+           replicas: "${{ REPLICATES }}"
            resources:
              limits:
-               memory: "{{ MEMORY_LIMIT }}"
+               memory: "${{ MEMORY_LIMIT }}"
            update_config:
              parallelism: 1            # The number of containers to update at a time.
              delay: 0s                 # The time to wait between updating a group of containers.
@@ -40,7 +35,7 @@ services:
              condition: any
              max_attempts: 3
          healthcheck:
-           test: "{{ HEALTH_CHECK }}"
+           test: "${{ HEALTH_CHECK }}"
            interval: 3s
            timeout: 5s
            retries: 3
@@ -66,6 +61,11 @@ def getServer() {
     remote.allowAnyHosts = true
     return remote
 }
+
+def str_to_list(str) {
+    return list = str.split(',')
+}
+
 
 def send_all(file_str) {
 
@@ -433,6 +433,9 @@ def call(String type, Map map) {
 
             stage('发布') {
                 steps {
+                    envs_list = str_to_list("${ENVS}")
+                    ports_list = str_to_list("${PORTS}")
+                    volumes_list = str_to_list("${VOLUMES}")
                     // generate deploy script
                     writeFile file: 'deploy.sh', text: "wget -O ${STACK_FILE_NAME} " +
                         " https://git.tezign.com/ops/jenkins-script/raw/master/resources/docker-compose/${STACK_FILE_NAME} \n" +
