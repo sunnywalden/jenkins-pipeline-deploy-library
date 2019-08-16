@@ -244,13 +244,15 @@ def call(Map map) {
                     script {
                         if (SEND_FILES instanceof java.lang.String) {
                             echo 'Convertion string ${SEND_FILES} to list'
-                            files = new JsonSlurper().parseText(SEND_FILES)
+//                             files = new JsonSlurper().parseText(SEND_FILES)
+                            files = SEND_FILES.split(',')
                         }
                         else {
                             files = SEND_FILES
                         }
 //                         files = SEND_FILES.split(',')
                     }
+                    println SEND_FILES.class
                     echo "print objects list: ${files}"
                     // send files
 //                     send_all("${SEND_FILES}")
