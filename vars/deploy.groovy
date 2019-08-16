@@ -433,9 +433,11 @@ def call(String type, Map map) {
 
             stage('发布') {
                 steps {
-                    envs_list = str_to_list("${ENVS}")
-                    ports_list = str_to_list("${PORTS}")
-                    volumes_list = str_to_list("${VOLUMES}")
+                    script {
+                        envs_list = str_to_list("${ENVS}")
+                        ports_list = str_to_list("${PORTS}")
+                        volumes_list = str_to_list("${VOLUMES}")
+                    }
                     // generate deploy script
                     writeFile file: 'deploy.sh', text: "wget -O ${STACK_FILE_NAME} " +
                         " https://git.tezign.com/ops/jenkins-script/raw/master/resources/docker-compose/${STACK_FILE_NAME} \n" +
