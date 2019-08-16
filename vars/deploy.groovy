@@ -413,7 +413,7 @@ def call(String type, Map map) {
             stage('获取主机') {
                 steps {
                     script {
-                        remote = ComFunc.getServer()
+                        remote = getServer()
                     }
                 }
             }
@@ -427,7 +427,7 @@ def call(String type, Map map) {
                 steps {
                     echo "print all files objects: ${SEND_FILES}"
                     // send files
-                    ComFunc.send_all("${SEND_FILES}")
+                    send_all("${SEND_FILES}")
                 }
             }
 
@@ -439,7 +439,7 @@ def call(String type, Map map) {
                         "sudo docker stack deploy -c /tmp/${STACK_FILE_NAME} ${APP_NAME}"
 
                     // deploy
-                    DockerCompose.generate_compose()
+                    generate_compose()
                     sshPut remote: remote, from: "/tmp/docker-stack.yml", into: "/tmp/docker-stack.yml"
                     sshScript remote: remote, script: "deploy.sh"
                 }
