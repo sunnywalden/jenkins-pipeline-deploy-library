@@ -231,10 +231,16 @@ def call(Map map) {
                 }
                 steps {
                     echo "print all files objects: ${SEND_FILES}"
-                    script {
-                        files = new JsonSlurper().parseText(SEND_FILES)
-//                         files = SEND_FILES.split(',')
+//                     script {
+                    if (SEND_FILES instanceof String[]) {
+
+                    files = new JsonSlurper().parseText(SEND_FILES)
                     }
+                    else {
+
+                    }
+//                         files = SEND_FILES.split(',')
+//                     }
                     echo "print objects list: ${files}"
                     // send files
 //                     send_all("${SEND_FILES}")
