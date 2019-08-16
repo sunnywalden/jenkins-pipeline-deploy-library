@@ -226,7 +226,7 @@ def call(Map map) {
                 steps {
                     echo "print all files objects: ${SEND_FILES}"
                     script {
-                        files = ${SEND_FILES}.split(',')
+                        files = SEND_FILES.split(',')
                     }
                     echo "print objects list: ${files}"
                     // send files
