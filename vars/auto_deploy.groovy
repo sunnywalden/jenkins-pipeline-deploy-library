@@ -111,19 +111,19 @@ def call(Map map) {
             // docker config
             REGISTRY_URL = "${map.REGISTRY_URL}"
             MEMORY_LIMIT = "${map.MEMORY_LIMIT}"
-            PORTS = "${map.PORTS}".split(',')
+            PORTS = "${map.PORTS}"
             REPLICATES = "${map.REPLICATES}"
             HEALTH_CHECK = "${map.HEALTH_CHECK}"
             NETWORK = "${map.NETWORK}"
-            VOLUMES = "${map.VOLUMES}".split(',')
-            ENVS = "${map.ENVS}".split(',')
+            VOLUMES = "${map.VOLUMES}"
+            ENVS = "${map.ENVS}"
 
             // deploy config
             APP_NAME = "${map.APP_NAME}"
             IMAGE_NAME = "${REGISTRY_URL}/" + "${map.APP_NAME}" + "_${map.ENV_TYPE}"
 //             STACK_FILE_NAME = "docker-stack-" + "${map.APP_NAME}" + "${map.ENV_TYPE}" + ".yml"
             STACK_FILE_NAME = 'docker-stack.yml'
-            SEND_FILES = "${map.SEND_FILES}".split(',')
+            SEND_FILES = "${map.SEND_FILES}"
         }
 
         // cron for pipe
@@ -243,7 +243,7 @@ def call(Map map) {
                     println SEND_FILES.class
                     script {
                         if (SEND_FILES instanceof java.lang.String) {
-                            echo 'Convertion string ${SEND_FILES} to list'
+                            echo "Convertion string ${SEND_FILES} to list"
 //                             files = new JsonSlurper().parseText(SEND_FILES)
                             files = SEND_FILES.split(',')
                         }
