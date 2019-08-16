@@ -12,19 +12,19 @@ def generate_compose() {
 """
 version: '3.4'
 services:
-    "${{ APP_NAME }}":
-         image: "${{ IMAGE_NAME }}:${{ env.BUILD_ID }}"
-         ports: "${{ ports_list }}"
-         environment: "${{ envs_list }}"
+    "${APP_NAME}":
+         image: "${IMAGE_NAME}:${env.BUILD_ID}"
+         ports: "${ports_list}"
+         environment: "${envs_list}"
          networks:
-           - "${{ NETWORK }}"
-         volumes: "${{ volumes_list }}"
+           - "${NETWORK}"
+         volumes: "${volumes_list}"
          stop_grace_period: 30s # Specify how long to wait when attempting to stop a container if it doesn’t handle SIGTERM
          deploy:
-           replicas: "${{ REPLICATES }}"
+           replicas: "${REPLICATES}"
            resources:
              limits:
-               memory: "${{ MEMORY_LIMIT }}"
+               memory: "${MEMORY_LIMIT}"
            update_config:
              parallelism: 1            # The number of containers to update at a time.
              delay: 0s                 # The time to wait between updating a group of containers.
@@ -35,7 +35,7 @@ services:
              condition: any
              max_attempts: 3
          healthcheck:
-           test: "${{ HEALTH_CHECK }}"
+           test: "${HEALTH_CHECK}"
            interval: 3s
            timeout: 5s
            retries: 3
