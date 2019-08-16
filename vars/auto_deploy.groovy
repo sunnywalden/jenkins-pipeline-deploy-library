@@ -1,5 +1,7 @@
 #!groovy
 
+import groovy.json.JsonSlurper
+
 def getServer() {
     def remote = [:]
     remote.name = 'manager node'
@@ -13,12 +15,11 @@ def getServer() {
 }
 
 def send_all(file_str) {
-    script {
-        files_list = file_str.split(',')
-    }
-    files_list.each { item ->
-//         environment {
-//         script {
+//     script {
+//         files_list = file_str.split(',')
+//     }
+//     files_list.each { item ->
+       file_str.each { item ->
             echo "print file object to be send: ${item}"
             files = item.split(':')
             if (files.size() == 2) {
@@ -27,9 +28,7 @@ def send_all(file_str) {
             } else {
                 return 0
             }
-//         }
             echo "send file ${source_file} to ${dest_file}"
-//         echo "${source_file} ${env.source_file}"
             sshPut remote: remote, from: "${source_file}", into: "${dest_file}"
     }
 }
@@ -232,12 +231,14 @@ def call(Map map) {
                 }
                 steps {
                     echo "print all files objects: ${SEND_FILES}"
-//                     script {
+                    script {
+                        files = new JsonSlurper().parseText(SEND_FILES)
 //                         files = SEND_FILES.split(',')
-//                     }
+                    }
 //                     echo "print objects list: ${files}"
                     // send files
-                    send_all("${SEND_FILES}")
+//                     send_all("${SEND_FILES}")
+                    send_all("${files}")
                 }
             }
 
@@ -251,6 +252,14 @@ def call(Map map) {
                     // deploy
                     sshScript remote: remote, script: "deploy.sh"
                 }
+            }
+        }
+        post {
+            always {
+                echo 'Deploy pipeline finished'
+            }
+            failure {
+                mail to: zhangbo@tezign.com, subject: 'The Pipeline failed :('
             }
         }
 //         post {
