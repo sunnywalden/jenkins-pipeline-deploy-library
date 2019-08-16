@@ -15,7 +15,7 @@ def getServer() {
 }
 
 def send_all(file_str) {
-    echo "file_str.class"
+    println file_str.class
     if (file_str instanceof String[]) {
 
         files_list = file_str.split(',')
