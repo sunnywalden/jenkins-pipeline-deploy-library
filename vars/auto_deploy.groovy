@@ -240,6 +240,7 @@ def call(Map map) {
                 }
                 steps {
                     echo "print all files objects: ${SEND_FILES}"
+                    println SEND_FILES.class
                     script {
                         if (SEND_FILES instanceof String[]) {
 
