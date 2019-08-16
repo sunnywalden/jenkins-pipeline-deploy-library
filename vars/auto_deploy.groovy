@@ -242,8 +242,8 @@ def call(Map map) {
                     echo "print all files objects: ${SEND_FILES}"
                     println SEND_FILES.class
                     script {
-                        if (SEND_FILES instanceof String[]) {
-
+                        if (SEND_FILES instanceof java.lang.String) {
+                            echo 'Convertion string to list'
                             files = new JsonSlurper().parseText(SEND_FILES)
                         }
                         else {
