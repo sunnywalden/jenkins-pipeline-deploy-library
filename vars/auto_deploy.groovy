@@ -15,11 +15,19 @@ def getServer() {
 }
 
 def send_all(file_str) {
+    if (file_str instanceof String[]) {
+
+        files_list = file_str.split(',')
+
+    }
 //     script {
 //         files_list = file_str.split(',')
 //     }
 //     files_list.each { item ->
-       file_str.each { item ->
+    else {
+       files_list = file_str
+    }
+    files_list.each { item ->
             echo "print file object to be send: ${item}"
             files = item.split(':')
             if (files.size() == 2) {
