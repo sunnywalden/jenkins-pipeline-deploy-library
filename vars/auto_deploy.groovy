@@ -21,11 +21,12 @@ def send_all(file_str) {
         script {
             echo "print file object to be send: ${item}"
             files = item.split(':')
-            if files.size == 2:
+            if (files.size == 2) {
                 source_file = files[0]
                 dest_file = files[1]
-            else
+            } else {
                 return 0
+            }
         }
         echo "send file ${source_file} to ${dest_file}"
 //         echo "${source_file} ${env.source_file}"
