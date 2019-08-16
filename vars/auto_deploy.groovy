@@ -347,8 +347,8 @@ def call(String type, Map map) {
 
             stage('编译代码') {
                 steps {
-                    sh 'echo `pwd`'
-                    sh "${BUILD_CMD}"
+                    echo "Ignore"
+//                     sh "${BUILD_CMD}"
                 }
             }
 
