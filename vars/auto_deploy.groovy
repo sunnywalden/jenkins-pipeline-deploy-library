@@ -18,7 +18,7 @@ def send_all(file_str) {
     }
     files_list.each { item ->
 //         environment {
-        script {
+//         script {
             echo "print file object to be send: ${item}"
             files = item.split(':')
             if (files.size == 2) {
@@ -27,10 +27,10 @@ def send_all(file_str) {
             } else {
                 return 0
             }
-        }
-        echo "send file ${source_file} to ${dest_file}"
+//         }
+            echo "send file ${source_file} to ${dest_file}"
 //         echo "${source_file} ${env.source_file}"
-        sshPut remote: remote, from: "${source_file}", into: "${dest_file}"
+            sshPut remote: remote, from: "${source_file}", into: "${dest_file}"
     }
 }
 
