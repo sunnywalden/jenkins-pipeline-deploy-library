@@ -15,19 +15,8 @@ def getServer() {
 }
 
 def send_all(file_str) {
-    println file_str.class
-    if (file_str instanceof String[]) {
 
-        files_list = file_str.split(',')
-
-    }
-//     script {
-//         files_list = file_str.split(',')
-//     }
-//     files_list.each { item ->
-    else {
-       files_list = file_str
-    }
+    files_list = file_str.split(',')
     files_list.each { item ->
             echo "print file object to be send: ${item}"
             files = item.split(':')
@@ -240,23 +229,8 @@ def call(Map map) {
                 }
                 steps {
                     echo "print all files objects: ${SEND_FILES}"
-                    println SEND_FILES.class
-                    script {
-                        if (SEND_FILES instanceof java.lang.String) {
-                            echo "Convertion string ${SEND_FILES} to list"
-//                             files = new JsonSlurper().parseText(SEND_FILES)
-                            files = SEND_FILES.split(',')
-                        }
-                        else {
-                            files = SEND_FILES
-                        }
-//                         files = SEND_FILES.split(',')
-                    }
-                    println SEND_FILES.class
-                    echo "print objects list: ${files}"
                     // send files
-//                     send_all("${SEND_FILES}")
-                    send_all("${files}")
+                    send_all("${SEND_FILES}")
                 }
             }
 
