@@ -288,7 +288,7 @@ def call(String type, Map map) {
 
             docker {
 //                 image 'python:3-alpine'
-                image 'docker:stable-git'
+                image 'docker'
                 args "${map.BUILD_ARGS}"
             }
         }
