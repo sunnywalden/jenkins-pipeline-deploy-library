@@ -21,7 +21,7 @@ services:
          volumes: "${VOLUMES_LIST}"
          stop_grace_period: 30s # Specify how long to wait when attempting to stop a container if it doesn’t handle SIGTERM
          deploy:
-           replicas: "${REPLICATES}"
+           replicas: "${REPLICATES}".toInteger()
            resources:
              limits:
                memory: "${MEMORY_LIMIT}"
@@ -40,8 +40,6 @@ services:
            timeout: 5s
            retries: 3
            start_period: 2m
-# external.name was deprecated in version 3.5 file format use name instead.
-# https://docs.docker.com/compose/compose-file/#external-1
 networks:
   tezign:
     external: true
