@@ -14,11 +14,11 @@ version: '3.4'
 services:
     "${APP_NAME}":
          image: "${IMAGE_NAME}:${env.BUILD_ID}"
-         ports: ${PORTS_LIST}
-         environment: ${ENVS_LIST}
+         ports: ${PORTS}
+         environment: ${ENVS}
          networks:
            - "${NETWORK}"
-         volumes: ${VOLUMES_LIST}
+         volumes: ${VOLUMES}
          stop_grace_period: 30s # Specify how long to wait when attempting to stop a container if it doesn’t handle SIGTERM
          deploy:
            replicas: ${REPLICATES}
@@ -385,9 +385,9 @@ def call(String type, Map map) {
             STACK_FILE_NAME = 'docker-stack.yml'
             SEND_FILES = "${map.SEND_FILES}"
 
-            ENVS_LIST = "${ENVS}".split(',')
-            PORTS_LIST = "${PORTS}".split(',')
-            VOLUMES_LIST = "${VOLUMES}".split(',')
+//             ENVS_LIST = "${ENVS}".split(',')
+//             PORTS_LIST = "${PORTS}".split(',')
+//             VOLUMES_LIST = "${VOLUMES}".split(',')
         }
 
         stages {
