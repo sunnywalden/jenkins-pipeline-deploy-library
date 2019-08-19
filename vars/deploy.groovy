@@ -480,16 +480,19 @@ def call(String type, Map map) {
 //                         volumes_list = str_to_list("${VOLUMES}")
 //                     }
                     // generate deploy script
-                    writeFile file: 'deploy.sh', text: "wget -O ${STACK_FILE_NAME} " +
-                        " https://git.tezign.com/ops/jenkins-script/raw/master/resources/docker-compose/${STACK_FILE_NAME} \n" +
-                        "sudo docker stack deploy -c /tmp/${STACK_FILE_NAME} ${APP_NAME}"
+//                     writeFile file: 'deploy.sh', text: "wget -O ${STACK_FILE_NAME} " +
+//                         " https://git.tezign.com/ops/jenkins-script/raw/master/resources/docker-compose/${STACK_FILE_NAME} \n" +
+//                         "sudo docker stack deploy -c /tmp/${STACK_FILE_NAME} ${APP_NAME} \n"
+                       writeFile file: 'deploy.sh', text: "sudo docker stack deploy -c /tmp/${STACK_FILE_NAME} ${APP_NAME} \n" +
+                           "sleep 180 \n" +
+                           "docker service ps ${APP_NAME}_${APP_NAME} | grep Running|wc -l` && if [ \$run_docker -eq ${REPLICATES} ];then echo 'Deploy success';else echo 'Deploy failed';fi"
 
                     // deploy
                     generate_compose()
                     mk_dir("${VOLUMES}")
                     sshPut remote: remote, from: "/tmp/docker-stack.yml", into: "/tmp/docker-stack.yml"
                     sshScript remote: remote, script: "deploy.sh"
-                    sshCommand remote: remote, sudo: true, command: "run_docker=`docker service ps ${APP_NAME}_${APP_NAME} | grep Running|wc -l` && if [ \$run_docker -eq ${REPLICATES} ];then echo 'Deploy success';else echo 'Deploy failed';fi | exit 0"
+//                     sshCommand remote: remote, sudo: true, command: "run_docker=`docker service ps ${APP_NAME}_${APP_NAME} | grep Running|wc -l` && if [ \$run_docker -eq ${REPLICATES} ];then echo 'Deploy success';else echo 'Deploy failed';fi | exit 0"
                 }
             }
         }
