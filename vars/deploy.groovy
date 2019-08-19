@@ -15,13 +15,13 @@ services:
     "${APP_NAME}":
          image: "${IMAGE_NAME}:${env.BUILD_ID}"
          ports:
-           ${PORTS}
+           - ${PORTS}
          environment:
-           ${ENVS}
+           - ${ENVS}
          networks:
            - "${NETWORK}"
          volumes:
-           ${VOLUMES}
+           - ${VOLUMES}
          stop_grace_period: 30s # Specify how long to wait when attempting to stop a container if it doesn’t handle SIGTERM
          deploy:
            replicas: ${REPLICATES}
@@ -67,6 +67,40 @@ def str_to_list(str) {
     return list = str.split(',')
 }
 
+def list_ready_use(str) {
+    res = ""
+    list = str.split(',')
+    list.each { item ->
+        res += '- ' + item + '\n'
+    }
+    return res
+
+}
+
+def mk_dir(volumes_str) {
+    volumes_list = volumes_str.split(',')
+    volumes_list.each { item ->
+        vls = item.split(':')
+        if (vls.size() == 2) {
+            dest_dir = vls[0]
+            if (dest_dir.isDirectory()) {
+                dest_path = dest_dir
+            }
+            else {
+                dest_path = file.absolutePath
+
+            }
+            echo "Volume to be created: ${dest_path}"
+//             File file = new File(dest_path)
+//             file.mkdir()
+            sshCommand remote: remote, sudo: true, command: "mkdir -p ${dest_path}"
+
+        }
+        else {
+            return 0
+        }
+    }
+}
 
 def send_all(file_str) {
 
@@ -388,9 +422,9 @@ def call(String type, Map map) {
             STACK_FILE_NAME = 'docker-stack.yml'
             SEND_FILES = "${map.SEND_FILES}"
 
-//             ENVS_LIST = "${ENVS}".split(',')
-//             PORTS_LIST = "${PORTS}".split(',')
-//             VOLUMES_LIST = "${VOLUMES}".split(',')
+            ENVS_LIST = list_ready_use("${ENVS}")
+            PORTS_LIST = list_ready_use("${PORTS}")
+            VOLUMES_LIST = list_ready_use("${VOLUMES}")
         }
 
         stages {
@@ -451,8 +485,10 @@ def call(String type, Map map) {
 
                     // deploy
                     generate_compose()
+                    mk_dir("${VOLUMES}")
                     sshPut remote: remote, from: "/tmp/docker-stack.yml", into: "/tmp/docker-stack.yml"
                     sshScript remote: remote, script: "deploy.sh"
+                    sshCommand remote: remote, sudo: true, command: "docker service ps ${APP_NAME}_${APP_NAME} | grep Running|wc -l"
                 }
             }
         }
