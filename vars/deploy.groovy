@@ -14,11 +14,11 @@ version: '3.4'
 services:
     "${APP_NAME}":
          image: "${IMAGE_NAME}:${env.BUILD_ID}"
-         ports: "${ports_list}"
-         environment: "${envs_list}"
+         ports: "${PORTS_LIST}"
+         environment: "${ENVS_LIST}"
          networks:
            - "${NETWORK}"
-         volumes: "${volumes_list}"
+         volumes: "${VOLUMES_LIST}"
          stop_grace_period: 30s # Specify how long to wait when attempting to stop a container if it doesn’t handle SIGTERM
          deploy:
            replicas: "${REPLICATES}"
@@ -375,7 +375,7 @@ def call(String type, Map map) {
             REGISTRY_URL = "${map.REGISTRY_URL}"
             MEMORY_LIMIT = "${map.MEMORY_LIMIT}"
             PORTS = "${map.PORTS}"
-            REPLICATES = "${map.REPLICATES}"
+            REPLICATES = "${map.REPLICATES}".toInteger()
             HEALTH_CHECK = "${map.HEALTH_CHECK}"
             NETWORK = "${map.NETWORK}"
             VOLUMES = "${map.VOLUMES}"
@@ -386,6 +386,10 @@ def call(String type, Map map) {
             IMAGE_NAME = "${REGISTRY_URL}/" + "${map.APP_NAME}" + "_${map.ENV_TYPE}"
             STACK_FILE_NAME = 'docker-stack.yml'
             SEND_FILES = "${map.SEND_FILES}"
+
+            ENVS_LIST = str_to_list("${ENVS}")
+            PORTS_LIST = str_to_list("${PORTS}")
+            VOLUMES_LIST = str_to_list("${VOLUMES}")
         }
 
         stages {
@@ -433,11 +437,11 @@ def call(String type, Map map) {
 
             stage('发布') {
                 steps {
-                    script {
-                        envs_list = str_to_list("${ENVS}")
-                        ports_list = str_to_list("${PORTS}")
-                        volumes_list = str_to_list("${VOLUMES}")
-                    }
+//                     script {
+//                         envs_list = str_to_list("${ENVS}")
+//                         ports_list = str_to_list("${PORTS}")
+//                         volumes_list = str_to_list("${VOLUMES}")
+//                     }
                     // generate deploy script
                     writeFile file: 'deploy.sh', text: "wget -O ${STACK_FILE_NAME} " +
                         " https://git.tezign.com/ops/jenkins-script/raw/master/resources/docker-compose/${STACK_FILE_NAME} \n" +
