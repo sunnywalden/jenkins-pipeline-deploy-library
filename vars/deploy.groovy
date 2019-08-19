@@ -489,7 +489,7 @@ def call(String type, Map map) {
                     mk_dir("${VOLUMES}")
                     sshPut remote: remote, from: "/tmp/docker-stack.yml", into: "/tmp/docker-stack.yml"
                     sshScript remote: remote, script: "deploy.sh"
-                    sshCommand remote: remote, sudo: true, command: "run_docker=`docker service ps ${APP_NAME}_${APP_NAME} | grep Running|wc -l` && if [ $run_docker -eq ${REPLICATES} ];then echo 'Deploy success';else echo 'Deploy failed'"
+                    sshCommand remote: remote, sudo: true, command: "run_docker=`docker service ps ${APP_NAME}_${APP_NAME} | grep Running|wc -l` && if [ \$run_docker -eq ${REPLICATES} ];then echo 'Deploy success';else echo 'Deploy failed'"
                 }
             }
         }
