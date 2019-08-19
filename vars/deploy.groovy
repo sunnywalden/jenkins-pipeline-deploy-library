@@ -435,7 +435,7 @@ def call(String type, Map map) {
 
             stage('发布') {
                 steps {
-                    println ENVS_LIST PORTS_LIST VOLUMES_LIST
+                    echo "${ENVS_LIST} ${PORTS_LIST} ${VOLUMES_LIST}"
 //                     script {
 //                         envs_list = str_to_list("${ENVS}")
 //                         ports_list = str_to_list("${PORTS}")
