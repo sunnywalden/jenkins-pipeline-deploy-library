@@ -7,7 +7,7 @@ import groovy.json.JsonSlurper
 def generate_compose() {
         filePath = "/tmp/docker-stack.yml"
         File file = new File(filePath)
-
+        file.delete()
         file <<
 """
 version: '3.4'
