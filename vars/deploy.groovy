@@ -88,7 +88,7 @@ def mk_dir(volumes_str) {
                 dest_path = dest_dir
             }
             else {
-                dest_path = file.absolutePath
+                dest_path = dir.absolutePath
 
             }
             echo "Volume to be created: ${dest_path}"
