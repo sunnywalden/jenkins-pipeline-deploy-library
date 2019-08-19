@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ee113ad0-6a45-46d0-8a84-4b31cb7e23c5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/vars/deploy.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/vars/deploy.groovy" afterDir="false" />
-    </list>
+    <list default="true" id="ee113ad0-6a45-46d0-8a84-4b31cb7e23c5" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -97,7 +95,7 @@
       <workItem from="1565765536981" duration="1147000" />
       <workItem from="1565766703384" duration="1186000" />
       <workItem from="1565768050045" duration="41424000" />
-      <workItem from="1566180110470" duration="7640000" />
+      <workItem from="1566180110470" duration="7955000" />
     </task>
     <servers />
   </component>
