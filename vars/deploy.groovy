@@ -14,11 +14,14 @@ version: '3.4'
 services:
     "${APP_NAME}":
          image: "${IMAGE_NAME}:${env.BUILD_ID}"
-         ports: \n${PORTS}
-         environment: \n${ENVS}
+         ports:
+           ${PORTS}
+         environment:
+           ${ENVS}
          networks:
            - "${NETWORK}"
-         volumes: \n${VOLUMES}
+         volumes:
+           ${VOLUMES}
          stop_grace_period: 30s # Specify how long to wait when attempting to stop a container if it doesn’t handle SIGTERM
          deploy:
            replicas: ${REPLICATES}
