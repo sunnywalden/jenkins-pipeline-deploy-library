@@ -8,9 +8,9 @@ this jenkins library can be used for your app deploy via pipeline, the main sect
 
 # deploy
 
-    1.addd this library as your global pipeline by config your jenkins in configure
+    1. addd this library as your global pipeline by config your jenkins in configure
     
-    2.add jenkinfile in your project like below:
+    2. add jenkinfile in your project like below:
     
 ```
 #!groovy
