@@ -20,7 +20,7 @@ graph TB
     
     2.add jenkinfile in your project like below:
     
-    ```
+```
 #!groovy
 
 // 在多分支构建下，严格规定Jenkinsfile只存在可以发版的分支上
@@ -71,5 +71,5 @@ map.put('SEND_FILES', 'Dockerfile:/tmp')
 
 // 调用library中var目录下的build.groovy脚本
 deploy("python3", map)
-    ```
+```
     
