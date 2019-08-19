@@ -3,16 +3,8 @@
 
 this jenkins library can be used for your app deploy via pipeline, the main sections included:
 
-graph TB
-    start --> pc(pull code from git)
-    pc --> bc(build your code)
-    bc --> bd(build docker image)
-    bd --> gs(=>operation: )get deploy server)
-    gs --> uc(update code)
-    uc --> dp(deploy)
-    dp ==> dp
+![image](https://github.com/sunnywalden/jenkins-pipeline-deploy-library/raw/master/img/flow.png)
 
- 
 
 # deploy
 

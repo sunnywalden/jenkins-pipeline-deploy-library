@@ -242,7 +242,7 @@ def call(String type, Map map) {
 			        jenkinsUrl:'https://your-jenkins-url',
 			        message:'pipeline构建失败',
 			        notifyPeople:'zhangbo'
-			        // 			        imageUrl:'图片地址',
+			        imageUrl:'../img/jenkins.png',
             }
         }
     }
