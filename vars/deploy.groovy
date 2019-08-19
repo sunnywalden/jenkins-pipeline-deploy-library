@@ -13,7 +13,7 @@ def generate_compose() {
 version: '3.4'
 services:
     "${APP_NAME}":
-         image: "${IMAGE_NAME}:${env.BUILD_ID}"
+         image: "${IMAGE_NAME}:${TAG}"
          ports:
            - ${PORTS}
          environment:
@@ -395,7 +395,7 @@ def call(String type, Map map) {
             REPO_URL = "${map.REPO_URL}"
             BRANCH_NAME = "${map.BRANCH_NAME}"
             CREDENTIALS_ID = 'artifactory'
-            TAG = "${map.tag}"
+//             TAG = "${map.tag}"
 
             // env type
             ENV_TYPE = "${map.ENV_TYPE}"
@@ -416,6 +416,7 @@ def call(String type, Map map) {
             NETWORK = "${map.NETWORK}"
             VOLUMES = "${map.VOLUMES}"
             ENVS = "${map.ENVS}"
+            TAG = "${map.tag}"
 
             // deploy config
             APP_NAME = "${map.APP_NAME}"
@@ -445,8 +446,8 @@ def call(String type, Map map) {
 
             stage('构建镜像') {
                 steps {
-                    sh "docker build -t ${IMAGE_NAME}:${env.BUILD_ID} ."
-                    sh "docker push ${IMAGE_NAME}:${env.BUILD_ID}"
+                    sh "docker build -t ${IMAGE_NAME}:${TAG} ."
+                    sh "docker push ${IMAGE_NAME}:${env.TAG}"
                 }
             }
 
@@ -486,7 +487,8 @@ def call(String type, Map map) {
                        writeFile file: 'deploy.sh', text: "sudo docker stack deploy -c /tmp/${STACK_FILE_NAME} ${APP_NAME} \n" +
                            "sleep 180 \n" +
                            "run_docker=`docker service ps ${APP_NAME}_${APP_NAME} | grep Running|wc -l` \n" +
-                           "if [ \$run_docker -eq ${REPLICATES} ];then echo 'Deploy success';else echo 'Deploy failed';fi"
+                           "health_docker=`docker ps|grep ${APP_NAME}_${APP_NAME} |grep -v unhealthy|grep healthy|wc -l`" +
+                           "if [[ \$run_docker -eq 1 ]] && [[ \$health_docker -ne 0 ];then echo 'Deploy success';else echo 'Deploy failed';fi"
 
                     // deploy
                     generate_compose()
