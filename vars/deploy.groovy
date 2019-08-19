@@ -485,7 +485,8 @@ def call(String type, Map map) {
 //                         "sudo docker stack deploy -c /tmp/${STACK_FILE_NAME} ${APP_NAME} \n"
                        writeFile file: 'deploy.sh', text: "sudo docker stack deploy -c /tmp/${STACK_FILE_NAME} ${APP_NAME} \n" +
                            "sleep 180 \n" +
-                           "docker service ps ${APP_NAME}_${APP_NAME} | grep Running|wc -l` && if [ \$run_docker -eq ${REPLICATES} ];then echo 'Deploy success';else echo 'Deploy failed';fi"
+                           "run_docker=`docker service ps ${APP_NAME}_${APP_NAME} | grep Running|wc -l` \n" +
+                           "if [ \$run_docker -eq ${REPLICATES} ];then echo 'Deploy success';else echo 'Deploy failed';fi"
 
                     // deploy
                     generate_compose()
