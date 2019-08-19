@@ -385,9 +385,9 @@ def call(String type, Map map) {
             STACK_FILE_NAME = 'docker-stack.yml'
             SEND_FILES = "${map.SEND_FILES}"
 
-            ENVS_LIST = str_to_list("${ENVS}")
-            PORTS_LIST = str_to_list("${PORTS}")
-            VOLUMES_LIST = str_to_list("${VOLUMES}")
+            ENVS_LIST = "${ENVS}".split(',')
+            PORTS_LIST = "${PORTS}".split(',')
+            VOLUMES_LIST = "${VOLUMES}".split(',')
         }
 
         stages {
