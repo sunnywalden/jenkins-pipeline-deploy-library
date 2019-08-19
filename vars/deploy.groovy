@@ -14,11 +14,11 @@ version: '3.4'
 services:
     "${APP_NAME}":
          image: "${IMAGE_NAME}:${env.BUILD_ID}"
-         ports: "${PORTS_LIST}"
-         environment: "${ENVS_LIST}"
+         ports: ${PORTS_LIST}
+         environment: ${ENVS_LIST}
          networks:
            - "${NETWORK}"
-         volumes: "${VOLUMES_LIST}"
+         volumes: ${VOLUMES_LIST}
          stop_grace_period: 30s # Specify how long to wait when attempting to stop a container if it doesn’t handle SIGTERM
          deploy:
            replicas: ${REPLICATES}
@@ -435,6 +435,7 @@ def call(String type, Map map) {
 
             stage('发布') {
                 steps {
+                    println ENVS_LIST PORTS_LIST VOLUMES_LIST
 //                     script {
 //                         envs_list = str_to_list("${ENVS}")
 //                         ports_list = str_to_list("${PORTS}")
