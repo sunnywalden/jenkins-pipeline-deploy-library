@@ -21,7 +21,7 @@ services:
          volumes: "${VOLUMES_LIST}"
          stop_grace_period: 30s # Specify how long to wait when attempting to stop a container if it doesn’t handle SIGTERM
          deploy:
-           replicas: "${REPLICATES}".toInteger()
+           replicas: ${REPLICATES}
            resources:
              limits:
                memory: "${MEMORY_LIMIT}"
