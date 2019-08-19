@@ -504,6 +504,12 @@ def call(String type, Map map) {
                 mail to: 'zhangbo@tezign.com', subject: 'The Pipeline failed', body: '''
                     Deploy pipeline is failed
                 '''
+			    dingTalk accessToken:'https://oapi.dingtalk.com/robot/send?access_token=fa21856b608220c306a606eb482ca6f72b67b62f3dd5b45a666f9f9646aaa047',
+// 			        imageUrl:'图片地址',
+			        jenkinsUrl:'https://sw-ci.tezign.com/jenkins',
+// 			        message:'pipeline构建失败',
+// 			        notifyPeople:'zhangbo'
+			    }
             }
         }
     }
