@@ -1,16 +1,18 @@
 
-# describe
+# describe 简介
 
 this jenkins library can be used for your app deploy via pipeline, the main sections included:
+
+自定义的Jenkins shared library，用于编译并部署应用到Docker环境：
 
 ![image](https://github.com/sunnywalden/jenkins-pipeline-deploy-library/raw/master/img/flow.png)
 
 
-# deploy
+# deploy 部署
 
-    1. addd this library as your global pipeline by config your jenkins in configure
+    1. addd this library as your global pipeline by config your jenkins in configure 修改Jenkins配置，将本库添加为全局的pipeline
     
-    2. add jenkinfile in your project like below:
+    2. add jenkinfile in your project like below:  在应用代码项目中定义jenkinfile，引用本库
     
 ```
 #!groovy
